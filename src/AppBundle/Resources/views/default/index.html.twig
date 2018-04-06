@@ -1,6 +1,108 @@
 {% extends 'base.html.twig' %}
-
+{% block stylesheets %}
+<style>
+    .block-task{
+        width: 600px;
+        margin: 0 auto;
+    }
+    .block-task h1{
+        font-family: sans-serif;
+    }
+    .block-task label{
+        display: block;
+        font-size: 24px;
+        margin: 13px 0;
+        font-family: sans-serif;
+        font-weight: bold;
+    }
+    .block-task input{
+        width: 95%;
+        margin-bottom: 12px;
+        height: 10px;
+        padding: 10px;
+        border: 1px solid black;
+        border-radius: 14px;
+        outline: none;
+    }
+    .block-task button{
+        border: 1px solid black;
+        padding: 5px;
+        width: 160px;
+        border-radius: 12px;
+        color: white;
+        background: #545454;
+    }
+    .block-task table,td,th {
+        border: solid 1px #40bf17;
+        border-collapse: collapse;
+    }
+    .block-task table{
+        margin-bottom: 20px;
+        width: 100%;
+    }
+    .block-task table thead{
+        background: #69d845;
+    }
+    .block-task table thead th,td,table tbody th,td{
+        padding:12px;
+    }
+    .block-task .remove-task,.start-task,.end-task {
+        padding: 3px 7px;
+        background: #e04343;
+        display: inline-block;
+        color: white;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 14px;
+        font-family: sans-serif;
+        margin-right: 5px;
+    }
+    .block-task .start-task {
+        background: cornflowerblue;
+    }
+    .block-task .end-task{
+        background: #b99118;
+    }
+</style>
+{% endblock %}
 {% block body %}
-    <h1>ok</h1>
+    <div class="block-task">
+        <h1>Список Задач</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Задача</th>
+                    <th>Готовность</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.printTableStatus }}</td>
+                    <td>
+                        {% if(task.justCreated) %}
+                            <a class="start-task" href="{{ path('taskSetInProgress',{'id':task.id}) }}">Начать выполнение</a>
+                        {% elseif(task.inProgress) %}
+                            <a class="end-task" href="{{ path('taskSetDone',{'id':task.id}) }}">завершить выполнение</a>
+                        {% endif %}
+                        <a class="remove-task" href="{{ path('taskDelete',{'id':task.id}) }}">удалить</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Нет задач</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+         <a class="remove-task" href="{{ path('taskDeleteDoneAll') }}">Удалить законченные задачи</a>
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+    </div>
 {% endblock %}
 

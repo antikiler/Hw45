@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Lib\Enumeration\IssueStatus;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,6 +28,13 @@ class Task
      * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    private $status = IssueStatus::JUST_CREATED;
 
 
     /**
@@ -62,5 +70,60 @@ class Task
     {
         return $this->title;
     }
-}
 
+    /**
+     * Set status
+     *
+     * @param integer $status
+     *
+     * @return Task
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrintTableStatus()
+    {
+        return IssueStatus::getALL()[$this->status];
+    }
+
+    /**
+     * @return bool
+     */
+    public  function isJustCreated()
+    {
+        return $this->status == IssueStatus::JUST_CREATED;
+    }
+
+    /**
+     * @return bool
+     */
+    public  function isDone()
+    {
+        return $this->status == IssueStatus::DONE;
+    }
+
+    /**
+     * @return bool
+     */
+    public  function isInProgress()
+    {
+        return $this->status == IssueStatus::IN_PROGRESS;
+    }
+}

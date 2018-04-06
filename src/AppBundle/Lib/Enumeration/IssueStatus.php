@@ -1,5 +1,4 @@
 <?php
-
 namespace AppBundle\Lib\Enumeration;
 
 class IssueStatus
